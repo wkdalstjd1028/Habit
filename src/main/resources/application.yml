@@ -1,0 +1,51 @@
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  application:
+    name: habit
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  web:
+    resources:
+      cache:
+        period: 0
+      chain:
+        cache: false
+
+   ####################################
+  # MySQL ??
+  ####################################
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/habit?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: 1234
+
+  ####################################
+  # JPA ??
+  ####################################
+  jpa:
+    open-in-view: true      #
+    hibernate:
+      ddl-auto: create      # create, update, ...
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy # ?????? ?????? ??
+    show-sql: true          # SQL ?? ??
+    properties:
+      hibernate:
+        format_sql: true    # SQL ??? ??
+        dialect: org.hibernate.dialect.MySQL8Dialect # MySQL 8.x ?? ??
