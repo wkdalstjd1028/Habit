@@ -1,8 +1,8 @@
-package com.project.habit.user.service;
+package com.project.habit.member.service;
 
-import com.project.habit.user.dto.MemberDTO;
-import com.project.habit.user.entity.Member;
-import com.project.habit.user.repository.MemberRepository;
+import com.project.habit.member.dto.MemberDTO;
+import com.project.habit.member.entity.Member;
+import com.project.habit.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

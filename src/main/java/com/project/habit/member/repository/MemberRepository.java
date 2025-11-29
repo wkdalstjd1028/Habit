@@ -1,6 +1,6 @@
-package com.project.habit.user.repository;
+package com.project.habit.member.repository;
 
-import com.project.habit.user.entity.Member;
+import com.project.habit.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

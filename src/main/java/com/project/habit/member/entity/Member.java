@@ -1,7 +1,7 @@
-package com.project.habit.user.entity;
+package com.project.habit.member.entity;
 
 
-import com.project.habit.user.constant.Role;
+import com.project.habit.member.constant.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.project.habit.user.dto;
+package com.project.habit.member.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

@@ -1,9 +1,9 @@
-package com.project.habit.user.service;
+package com.project.habit.member.service;
 
 
-import com.project.habit.user.constant.Role;
-import com.project.habit.user.entity.Member;
-import com.project.habit.user.repository.MemberRepository;
+import com.project.habit.member.constant.Role;
+import com.project.habit.member.entity.Member;
+import com.project.habit.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

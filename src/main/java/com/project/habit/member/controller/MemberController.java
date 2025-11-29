@@ -1,7 +1,7 @@
-package com.project.habit.user.controller;
+package com.project.habit.member.controller;
 
-import com.project.habit.user.dto.MemberDTO;
-import com.project.habit.user.service.MemberService;
+import com.project.habit.member.dto.MemberDTO;
+import com.project.habit.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

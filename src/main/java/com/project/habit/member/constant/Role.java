@@ -1,4 +1,4 @@
-package com.project.habit.user.constant;
+package com.project.habit.member.constant;
 
 import lombok.Getter;
 
