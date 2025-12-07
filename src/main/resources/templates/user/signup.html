@@ -1,4 +1,6 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>회원가입 | Mini Habit Tracker</title>
@@ -125,6 +127,10 @@
     </style>
 </head>
 <body>
+
+<!-- 공통 헤더 -->
+<div th:replace="fragments/header :: siteHeader"></div>
+
 <div class="container">
     <div class="title">
         <h1>회원가입</h1>
@@ -191,5 +197,6 @@
         버전 0.1 · 잔디 심기 MVP
     </div>
 </div>
+
 </body>
 </html>

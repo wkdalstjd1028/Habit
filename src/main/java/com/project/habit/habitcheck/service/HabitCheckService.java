@@ -17,18 +17,21 @@ public class HabitCheckService {
     private final HabitRepository habitRepository;
     private final HabitCheckRepository habitCheckRepository;
 
+    // 오늘 날짜로 체크인
     public void checkInToday(HabitCheckDTO habitCheckDTO) {
 
-        Habit habit = habitCheckRepository.findById(habitCheckDTO.getHabitId())
-                .orElseThrow(() -> new RuntimeException("해당 습관이 존재하지 않습니다.")).getHabit();
+        // 1) habitId로 실제 Habit 엔티티 조회
+        Habit habit = habitRepository.findById(habitCheckDTO.getHabitId())
+                .orElseThrow(() -> new RuntimeException("해당 습관이 존재하지 않습니다."));
 
         LocalDate today = LocalDate.now();
 
-        // 중복 체크
+        // 2) 오늘 이미 체크했는지 확인
         if (habitCheckRepository.existsByHabitAndCheckInDate(habit, today)) {
             throw new RuntimeException("오늘은 이미 체크인했습니다.");
         }
 
+        // 3) 새로운 HabitCheck 저장
         HabitCheck checkIn = HabitCheck.builder()
                 .habit(habit)
                 .checkInDate(today)
