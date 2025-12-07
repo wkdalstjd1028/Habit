@@ -18,22 +18,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-        http.formLogin(form->form
+        http.formLogin(form -> form
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/")
+                .loginProcessingUrl("/user/login") // ★ 폼 action과 동일
+                .defaultSuccessUrl("/", true)
                 .failureUrl("/user/login/error")
-                .usernameParameter("username")
+                .usernameParameter("username")     // ★ username 기반 로그인
                 .passwordParameter("password")
-                .permitAll());
+                .permitAll()
+        );
 
-        http.logout(Customizer.withDefaults());
+        http.logout(logout -> logout
+                .logoutUrl("/user/logout")
+                .logoutSuccessUrl("/")
+        );
 
-        http.authorizeHttpRequests((auth)->auth
+        http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/").permitAll()
-                .requestMatchers("/habit/**").permitAll()
-                .requestMatchers("/user/**").permitAll()
-                .anyRequest().authenticated());
+                .requestMatchers("/", "/user/**").permitAll()
+                .anyRequest().authenticated()
+        );
 
         return http.build();
     }
@@ -43,10 +47,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 }

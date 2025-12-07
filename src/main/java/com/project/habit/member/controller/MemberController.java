@@ -38,7 +38,7 @@ public class MemberController {
 
     @GetMapping("/signup")
     public String signup(Model model){
-        model.addAttribute("userDto",new MemberDTO());
+        model.addAttribute("memberDto", new MemberDTO()); // ★ 수정
         return "user/signup";
     }
 
@@ -63,7 +63,7 @@ public class MemberController {
             return "user/signup";
         }
 
-        return "redirect:/";
+        return "redirect:/user/login"; // ★ 회원가입 후 바로 로그인 페이지로
     }
 
 
