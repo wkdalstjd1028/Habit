@@ -44,26 +44,27 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String signup(@Valid MemberDTO memberDto, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("memberDto", memberDto); // ★ 누락 시 EL 오류 발생
             return "user/signup";
         }
 
         if(!memberDto.getPassword1().equals(memberDto.getPassword2())){
-            bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+            bindingResult.rejectValue("password2", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("memberDto", memberDto); // ★ 반드시 있어야 함
             return "user/signup";
         }
 
-        try{
+        try {
             memberService.create(memberDto);
-        }catch(DataIntegrityViolationException e){
-            model.addAttribute("errorMessage", "이미 등록된 사용자입니다.");
-            return "user/signup";
-        }catch(Exception e){
-            model.addAttribute("errorMessage", e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
+            model.addAttribute("memberDto", memberDto); // ★ 다시 담기
             return "user/signup";
         }
 
-        return "redirect:/user/login"; // ★ 회원가입 후 바로 로그인 페이지로
+        return "redirect:/user/login";
     }
 
 
