@@ -1,32 +1,38 @@
 package com.project.habit.habit.entity;
 
+import com.project.habit.habit.constant.HabitType;
 import com.project.habit.member.entity.Member;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "habits")
 public class Habit {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;      // 이 습관의 주인
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false, length = 100)
-    private String title;   // 습관 이름
+    private String name;
 
-    @Column(length = 255)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HabitType habitType;
+
     private String description;
 
+    @Builder.Default
     @Column(nullable = false)
-    private LocalDate startDate;
-
-    @Column
-    private LocalDate endDate;
-
-    @Column(nullable = false)
-    private Boolean active = true;
+    private Boolean isActive = true;
 }
