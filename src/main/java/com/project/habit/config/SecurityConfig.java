@@ -3,7 +3,6 @@ package com.project.habit.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,14 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.formLogin(form -> form
                 .loginPage("/user/login")
-                .loginProcessingUrl("/user/login") // ★ 폼 action과 동일
+                .loginProcessingUrl("/user/login")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/user/login/error")
-                .usernameParameter("username")     // ★ username 기반 로그인
+                .usernameParameter("username")
                 .passwordParameter("password")
                 .permitAll()
         );
@@ -34,8 +33,7 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/", "/user/**").permitAll()
+                .requestMatchers("/", "/user/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
         );
 
@@ -51,5 +49,4 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 }

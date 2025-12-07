@@ -1,7 +1,6 @@
 package com.project.habit.member.service;
 
 
-import com.project.habit.member.constant.Role;
 import com.project.habit.member.entity.Member;
 import com.project.habit.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,30 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class MemberSecurityService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Member> loginUser = memberRepository.findByUsername(username);
-        if(loginUser.isEmpty()){
-            throw new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."+username);
-        }
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-        Member member = loginUser.get();
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if("admin".equals(username)){
-            authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-        }else {
-            authorities.add(new SimpleGrantedAuthority(Role.USER.getValue()));
-        }
-        return new User(member.getUsername(), member.getPassword(), authorities);
+        return User.builder()
+                .username(member.getUsername())
+                .password(member.getPassword())
+                .roles("USER")      // ★ role 없이 USER 고정
+                .build();
     }
 }
 

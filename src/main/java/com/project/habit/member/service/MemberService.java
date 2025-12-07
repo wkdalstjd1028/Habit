@@ -12,23 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-    public void create(@Valid MemberDTO memberDto) {
+    public Member create(MemberDTO dto) {
         Member member = Member.builder()
-                .username(memberDto.getUsername())
-                .password(passwordEncoder.encode(memberDto.getPassword1()))
+                .username(dto.getUsername())
+                .password(passwordEncoder.encode(dto.getPassword1()))
                 .build();
 
-        memberRepository.save(member);
-
-    }
-
-    public Member getMember(String username) {
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다 : " + username));
-        return member;
+        return memberRepository.save(member);
     }
 }

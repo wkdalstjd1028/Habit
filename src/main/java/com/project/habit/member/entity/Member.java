@@ -1,7 +1,6 @@
 package com.project.habit.member.entity;
 
 
-import com.project.habit.member.constant.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +23,5 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false, length = 50)
-    private Role role;
 
 }
