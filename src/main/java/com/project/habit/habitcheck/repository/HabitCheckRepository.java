@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
 
@@ -21,4 +22,7 @@ public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
     void deleteByHabit(Habit habit);
 
     List<HabitCheck> findByHabit_MemberAndCheckInDate(Member member, LocalDate checkInDate);
+
+    Optional<HabitCheck> findByHabitAndCheckInDate(Habit habit, LocalDate checkInDate);
 }
+

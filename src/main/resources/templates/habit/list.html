@@ -5,6 +5,9 @@
     <title>내 습관 | Mini Habit Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" th:href="@{/css/habit-list.css}">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
 </head>
 <body>
 
@@ -22,7 +25,6 @@
         <button type="button" class="filter" data-filter="DAILY">매일</button>
         <button type="button" class="filter" data-filter="WEEKLY">매주</button>
         <button type="button" class="filter" data-filter="MONTHLY">매월</button>
-        <button type="button" class="filter" data-filter="OTHER">기타</button>
     </div>
 
     <ul class="todo-list">
@@ -58,53 +60,94 @@
 </div>
 
 <script>
-    document.querySelectorAll(".filter").forEach(btn => {
+    /* 1. 필터링 로직 (버튼 클릭 시 동작) */
+    const filterBtns = document.querySelectorAll(".filter");
+    const todoItems = document.querySelectorAll(".todo-item");
+
+    filterBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+            // 모든 버튼에서 active 클래스 제거
+            filterBtns.forEach(b => b.classList.remove("active"));
+            // 클릭한 버튼에만 active 클래스 추가 (초록색 배경)
             btn.classList.add("active");
 
-            const type = btn.dataset.filter;
-            document.querySelectorAll(".todo-item").forEach(item => {
-                if (type === "ALL") {
+            const filterType = btn.getAttribute("data-filter");
+
+            todoItems.forEach(item => {
+                // "습관이 없습니다" 메시지는 필터링에서 제외하거나 항상 표시하려면 로직 조정 필요
+                if (item.querySelector(".empty-message")) return;
+
+                const itemType = item.getAttribute("data-habit-type");
+
+                if (filterType === "ALL") {
                     item.style.display = "flex";
                 } else {
-                    item.style.display =
-                        item.dataset.habitType === type ? "flex" : "none";
+                    // 타입이 일치하면 보여주고(flex), 아니면 숨김(none)
+                    if (itemType === filterType) {
+                        item.style.display = "flex";
+                    } else {
+                        item.style.display = "none";
+                    }
                 }
             });
         });
     });
 
+    /* 2. 체크인 토글 로직 (앞서 수정한 CSRF, 404 해결 버전) */
     async function toggleCheck(habitId, element) {
+        // CSRF 토큰 안전하게 가져오기
+        const csrfMeta = document.querySelector("meta[name='_csrf']");
+        const csrfHeaderMeta = document.querySelector("meta[name='_csrf_header']");
+
+        // 메타 태그가 없을 경우를 대비한 기본값 설정
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute("content") : "";
+        const csrfHeader = csrfHeaderMeta ? csrfHeaderMeta.getAttribute("content") : "X-CSRF-TOKEN";
+
         try {
             const response = await fetch(`/habit/check/${habitId}`, {
                 method: "POST",
-                headers: { "X-Requested-With": "XMLHttpRequest" }
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    [csrfHeader]: csrfToken
+                }
             });
 
             if (response.ok) {
+                // UI 업데이트
                 const item = element.closest(".todo-item");
                 item.classList.toggle("done-today");
+
+                // 체크박스와 완료 상태 동기화
+                const isDone = item.classList.contains("done-today");
+                const checkBox = item.querySelector(".check-box");
+                if(checkBox) checkBox.checked = isDone;
+
+            } else {
+                console.error("서버 에러:", response.status);
+                // 404면 컨트롤러 없음, 403이면 CSRF 문제
+                if(response.status === 404) alert("요청 주소를 찾을 수 없습니다.");
+                else if(response.status === 403) alert("보안 토큰(CSRF) 오류입니다.");
+                else alert("처리 중 오류가 발생했습니다.");
             }
         } catch (e) {
-            console.error(e);
+            console.error("통신 오류:", e);
         }
     }
 
+    // 이벤트 리스너 등록 (체크박스 & 버튼)
     document.querySelectorAll(".check-box").forEach(cb => {
         cb.addEventListener("change", () => {
-            const habitId = cb.closest(".todo-item").dataset.habitId;
+            const habitId = cb.closest(".todo-item").getAttribute("data-habit-id");
             toggleCheck(habitId, cb);
         });
     });
 
     document.querySelectorAll(".check-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const habitId = btn.closest(".todo-item").dataset.habitId;
+            const habitId = btn.closest(".todo-item").getAttribute("data-habit-id");
             toggleCheck(habitId, btn);
         });
     });
 </script>
-
 </body>
 </html>

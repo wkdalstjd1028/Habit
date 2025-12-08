@@ -8,106 +8,116 @@
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .todo-input-row {
-  margin-bottom: 18px;
-
+    margin-bottom: 18px;
 }
 
 .todo-add-btn {
-  background: #7BCF71;
-  color: white !important;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 28px;
-  font-size: 17px;
-  text-decoration: none !important;
-  display: inline-block;
-  cursor: pointer;
+    background: #7BCF71;
+    color: white !important;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 28px;
+    font-size: 17px;
+    text-decoration: none !important;
+    display: inline-block;
+    cursor: pointer;
 }
 .todo-add-btn:hover { background: #7BCF71; }
 
 .todo-filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .filter {
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: none;
-  background: #e5e7eb;
-  cursor: pointer;
-  font-size: 15px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    background: #e5e7eb;
+    cursor: pointer;
+    font-size: 15px;
 }
 .filter.active { background: #7CCE7C; color: white; }
 
 .todo-list { list-style: none; padding: 0; margin: 0; }
 
 .todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
 }
 
 .todo-main {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .todo-check input {
-  width: 19px;
-  height: 19px;
-  cursor: pointer;
+    width: 19px;
+    height: 19px;
+    cursor: pointer;
+}
+
+/* ▼▼▼ [수정됨] 링크 스타일 제거 (검정색, 밑줄 없음) ▼▼▼ */
+.todo-link {
+    text-decoration: none; /* 밑줄 제거 */
+    color: #333;           /* 글자색: 진한 회색/검정 */
+    display: flex;
+    align-items: center;
+}
+.todo-link:hover {
+    color: #000;           /* 마우스 올리면 완전 검정 */
 }
 
 .todo-text {
-  font-size: 17px;
+    font-size: 17px;
 }
 
 .todo-item.done-today .todo-text {
-  text-decoration: line-through;
-  text-decoration-thickness: 2px;
-  color: #111;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    color: #888; /* 완료 시 약간 흐리게 */
 }
 
 .todo-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .check-btn {
-  background: #22c55e;
-  border-radius: 999px;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
+    background: #22c55e;
+    border-radius: 999px;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
 }
 .check-btn:hover { background: #7BCF71; }
 
 .todo-edit-btn {
-  color: #2563eb;
-  font-size: 15px;
-  text-decoration: none;
+    color: #2563eb;
+    font-size: 15px;
+    text-decoration: none;
 }
 .todo-edit-btn:hover { text-decoration: underline; }
 
 .todo-delete-btn {
-  background: none;
-  border: none;
-  color: #ef4444;
-  font-size: 15px;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 15px;
+    cursor: pointer;
 }
 .todo-delete-btn:hover { text-decoration: underline; }

@@ -4,6 +4,7 @@ import com.project.habit.habit.constant.HabitType;
 import com.project.habit.habit.dto.HabitDTO;
 import com.project.habit.habit.entity.Habit;
 import com.project.habit.habit.repository.HabitRepository;
+import com.project.habit.habitcheck.entity.HabitCheck;
 import com.project.habit.habitcheck.repository.HabitCheckRepository;
 import com.project.habit.member.entity.Member;
 import com.project.habit.member.service.MemberService;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -103,5 +105,25 @@ public class HabitService {
                 .orElseThrow(() -> new RuntimeException("해당 습관을 찾을 수 없습니다."));
 
         return HabitDTO.fromEntity(habit);
+    }
+
+    @Transactional
+    public boolean toggleCheck(Long habitId, String username) {
+        Habit habit = getHabitEntity(habitId, username);
+        LocalDate today = LocalDate.now();
+
+        Optional<HabitCheck> habitCheck = habitCheckRepository.findByHabitAndCheckInDate(habit, today);
+
+        if (habitCheck.isPresent()) {
+            habitCheckRepository.delete(habitCheck.get());
+            return false;
+        } else {
+            HabitCheck newCheck = HabitCheck.builder()
+                    .habit(habit)
+                    .checkInDate(today)
+                    .build();
+            habitCheckRepository.save(newCheck);
+            return true;
+        }
     }
 }

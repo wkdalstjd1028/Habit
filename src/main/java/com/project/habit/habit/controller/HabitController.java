@@ -6,6 +6,7 @@ import com.project.habit.habit.service.HabitService;
 import com.project.habit.habitcheck.service.HabitCheckService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -130,4 +131,18 @@ public class HabitController {
 
         return "habit/detail";
     }
+    @PostMapping("/check/{habitId}")
+    @ResponseBody
+    public ResponseEntity<String> checkHabit(@PathVariable Long habitId,
+                                             @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        }
+
+        boolean isChecked = habitService.toggleCheck(habitId, user.getUsername());
+
+        return ResponseEntity.ok(isChecked ? "CHECKED" : "UNCHECKED");
+    }
 }
+
+
