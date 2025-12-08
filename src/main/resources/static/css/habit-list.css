@@ -68,15 +68,14 @@
     cursor: pointer;
 }
 
-/* ▼▼▼ [수정됨] 링크 스타일 제거 (검정색, 밑줄 없음) ▼▼▼ */
 .todo-link {
-    text-decoration: none; /* 밑줄 제거 */
-    color: #333;           /* 글자색: 진한 회색/검정 */
+    text-decoration: none;
+    color: #333;
     display: flex;
     align-items: center;
 }
 .todo-link:hover {
-    color: #000;           /* 마우스 올리면 완전 검정 */
+    color: #000;
 }
 
 .todo-text {
@@ -86,7 +85,7 @@
 .todo-item.done-today .todo-text {
     text-decoration: line-through;
     text-decoration-thickness: 2px;
-    color: #888; /* 완료 시 약간 흐리게 */
+    color: #888;
 }
 
 .todo-actions {
