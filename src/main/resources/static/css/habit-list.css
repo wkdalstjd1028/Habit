@@ -1,4 +1,3 @@
-/* 전체 감싸는 박스 레이아웃 복원 */
 .todo-container {
     background: #ffffff;
     padding: 40px 45px;
@@ -8,14 +7,12 @@
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* 제목 */
 .title {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-/* 새 습관 등록하기 버튼 */
 .todo-input-row {
   margin-bottom: 18px;
 
@@ -34,7 +31,6 @@
 }
 .todo-add-btn:hover { background: #7BCF71; }
 
-/* 필터 버튼 블럭 */
 .todo-filters {
   display: flex;
   gap: 12px;
@@ -51,7 +47,6 @@
 }
 .filter.active { background: #7CCE7C; color: white; }
 
-/* 리스트 아이템 */
 .todo-list { list-style: none; padding: 0; margin: 0; }
 
 .todo-item {
@@ -62,21 +57,18 @@
   border-bottom: 1px solid #f3f4f6;
 }
 
-/* 왼쪽 영역 */
 .todo-main {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* 체크박스 */
 .todo-check input {
   width: 19px;
   height: 19px;
   cursor: pointer;
 }
 
-/* 텍스트 유지 & 취소선 굵게 */
 .todo-text {
   font-size: 17px;
 }
@@ -87,14 +79,12 @@
   color: #111;
 }
 
-/* 오른쪽 버튼 정렬 */
 .todo-actions {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* 체크인 버튼 */
 .check-btn {
   background: #22c55e;
   border-radius: 999px;
@@ -106,7 +96,6 @@
 }
 .check-btn:hover { background: #7BCF71; }
 
-/* 수정 */
 .todo-edit-btn {
   color: #2563eb;
   font-size: 15px;
@@ -114,7 +103,6 @@
 }
 .todo-edit-btn:hover { text-decoration: underline; }
 
-/* 🔥 삭제 — 빨간 글씨 유지 스타일 */
 .todo-delete-btn {
   background: none;
   border: none;

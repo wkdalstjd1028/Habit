@@ -15,7 +15,6 @@
     <h1 class="page-title">습관 수정</h1>
 
     <section class="card">
-        <!-- habitId는 컨트롤러에서 model.addAttribute("habitId", habitId) 로 넘겨줌 -->
         <form th:action="@{|/habit/edit/${habitId}|}"
               th:object="${habitDTO}"
               method="post">
@@ -24,7 +23,6 @@
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
 
-            <!-- 습관 이름 -->
             <div class="form-group">
                 <label for="name">습관 이름</label>
                 <input type="text" id="name" th:field="*{name}"/>
@@ -34,7 +32,6 @@
                      th:errors="*{name}">이름 에러</div>
             </div>
 
-            <!-- 습관 유형 -->
             <div class="form-group">
                 <label for="habitType">습관 유형</label>
                 <select id="habitType" th:field="*{habitType}">
@@ -51,7 +48,6 @@
                 <p class="helper-text">처음 생성했던 유형을 변경할 수도 있습니다.</p>
             </div>
 
-            <!-- 설명 -->
             <div class="form-group">
                 <label for="description">설명</label>
                 <textarea id="description" th:field="*{description}"></textarea>

@@ -17,7 +17,6 @@
         <a th:href="@{/habit/create}" class="todo-add-btn">새 습관 등록하기</a>
     </div>
 
-    <!-- 필터 -->
     <div class="todo-filters">
         <button type="button" class="filter active" data-filter="ALL">전체</button>
         <button type="button" class="filter" data-filter="DAILY">매일</button>
@@ -58,9 +57,7 @@
     </ul>
 </div>
 
-<!-- 🔥 여기부터 script 복원 & 최종 업데이트 -->
 <script>
-    /* ✔ 필터 버튼 클릭 시 습관 분류 표시 */
     document.querySelectorAll(".filter").forEach(btn => {
         btn.addEventListener("click", () => {
             document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
@@ -78,7 +75,6 @@
         });
     });
 
-    /* ✔ 체크박스 or 체크인 버튼 클릭 → Ajax 체크인 / 취소선 유지 */
     async function toggleCheck(habitId, element) {
         try {
             const response = await fetch(`/habit/check/${habitId}`, {
@@ -95,7 +91,6 @@
         }
     }
 
-    /* 체크박스 클릭 */
     document.querySelectorAll(".check-box").forEach(cb => {
         cb.addEventListener("change", () => {
             const habitId = cb.closest(".todo-item").dataset.habitId;
@@ -103,7 +98,6 @@
         });
     });
 
-    /* 체크인 버튼 클릭 */
     document.querySelectorAll(".check-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const habitId = btn.closest(".todo-item").dataset.habitId;

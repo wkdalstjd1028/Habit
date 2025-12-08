@@ -157,9 +157,8 @@ header {
     font-weight: 500;
 }
 
-/* 링크 스타일 */
 .today-link {
-    color: #e5e7eb;            /* 카드 배경이 어두워서 밝은 색 */
+    color: #e5e7eb;
     text-decoration: none;
 }
 

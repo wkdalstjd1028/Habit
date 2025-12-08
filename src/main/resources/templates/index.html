@@ -39,10 +39,8 @@
                     <span id="grass-month-label" style="font-size: 12px; color: #9ca3af; margin-left: 6px;"></span>
                 </div>
 
-                <!-- 실제 잔디가 들어갈 영역 -->
                 <div id="grass-grid"
                      style="display: flex; flex-wrap: wrap; gap: 4px;">
-                    <!-- JS로 작은 네모(칸)들을 채워 넣을 거야 -->
                 </div>
 
                 <section class="today-section" sec:authorize="isAuthenticated()"
@@ -53,7 +51,7 @@
 
                     <p id="today-empty"
                        style="font-size: 13px; color: #9ca3af; margin: 4px 0; display: none;">
-                        오늘 해야 할 일은 모두 완료했어요 🎉
+                        오늘 해야 할 일은 모두 완료했어요
                     </p>
 
                     <ul id="today-list"
@@ -62,7 +60,7 @@
                     <div style="margin-top: 8px;">
                         <a th:href="@{/habit/list}"
                            style="font-size: 12px; color: #16a34a; text-decoration: none;">
-                            내 습관 페이지에서 체크인 하기 →
+                            내 습관 페이지에서 체크인 하기
                         </a>
                     </div>
                 </section>
@@ -77,16 +75,14 @@
         const grid = document.getElementById("grass-grid");
         const monthLabel = document.getElementById("grass-month-label");
 
-        if (!grid) return;  // 홈이 아닐 수도 있으니 안전 장치
+        if (!grid) return;
 
         const today = new Date();
         const year = today.getFullYear();
-        const month = today.getMonth() + 1; // 1~12
+        const month = today.getMonth() + 1;
 
-        // 월 라벨 표시 (예: 2025-12)
         monthLabel.textContent = `${year}-${String(month).padStart(2, "0")}`;
 
-        // ✅ 1) 월별 잔디 로딩
         fetch(`/habit/calendar?year=${year}&month=${month}`)
             .then(res => res.json())
             .then(data => {
@@ -106,7 +102,6 @@
                 console.error("잔디 데이터 로딩 실패", err);
             });
 
-        // ✅ 2) 오늘 해야 할 일 로딩
         const todayList = document.getElementById("today-list");
         const todayEmpty = document.getElementById("today-empty");
 
@@ -123,16 +118,12 @@
                         const li = document.createElement("li");
                         li.classList.add("today-item");
 
-                        // 점(•) 텍스트
                         const bullet = document.createTextNode("• ");
 
-                        // 실제 클릭 가능한 링크
                         const link = document.createElement("a");
                         link.classList.add("today-link");
                         link.textContent = habit.name;
 
-                        // ✔ 여기서 상세(또는 수정) 화면으로 이동
-                        //    - 현재 갖고 있는 edit URL 패턴 사용: /habit/edit/{id}
                         link.href = `/habit/detail/${habit.id}`;;
 
                         li.appendChild(bullet);

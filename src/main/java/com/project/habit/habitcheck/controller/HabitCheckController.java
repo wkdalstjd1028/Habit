@@ -35,7 +35,6 @@ public class HabitCheckController {
             habitCheckService.checkInToday(habitCheckDTO);
             return ResponseEntity.ok("체크인 완료!");
         } catch (RuntimeException e) {
-            // 서비스에서 던진 "오늘은 이미 체크인했습니다.", "해당 습관이 존재하지 않습니다." 등
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
@@ -60,7 +59,7 @@ public class HabitCheckController {
         Map<String, Object> result = new HashMap<>();
         result.put("year", y);
         result.put("month", m);
-        result.put("checkedDays", checkedDays); // 예: [1,3,5,10]
+        result.put("checkedDays", checkedDays);
 
         return result;
     }

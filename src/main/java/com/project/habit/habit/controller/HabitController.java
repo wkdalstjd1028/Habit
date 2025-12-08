@@ -37,14 +37,12 @@ public class HabitController {
         return "habit/list";
     }
 
-    /** 새 습관 등록 폼 */
     @GetMapping("/create")
     public String createHabitForm(Model model) {
         model.addAttribute("habitDTO", new HabitDTO());
         return "habit/create";
     }
 
-    /** 새 습관 저장 */
     @PostMapping("/create")
     public String createHabit(@AuthenticationPrincipal UserDetails user,
                               @Valid @ModelAttribute("habitDTO") HabitDTO habitDTO,
@@ -63,7 +61,6 @@ public class HabitController {
         return "redirect:/habit/list";
     }
 
-    /** 습관 수정 폼 */
     @GetMapping("/edit/{habitId}")
     public String editHabitForm(@AuthenticationPrincipal UserDetails user,
                                 @PathVariable Long habitId,
@@ -79,7 +76,6 @@ public class HabitController {
         return "habit/edit";
     }
 
-    /** 습관 수정 저장 */
     @PostMapping("/edit/{habitId}")
     public String editHabit(@AuthenticationPrincipal UserDetails user,
                             @PathVariable Long habitId,
@@ -99,7 +95,6 @@ public class HabitController {
         return "redirect:/habit/list";
     }
 
-    /** 습관 삭제 */
     @PostMapping("/delete/{habitId}")
     public String deleteHabit(@AuthenticationPrincipal UserDetails user,
                               @PathVariable Long habitId) {
@@ -113,7 +108,6 @@ public class HabitController {
         return "redirect:/habit/list";
     }
 
-    /** ✅ 오늘 해야 할 일 JSON으로 반환 */
     @GetMapping("/today")
     @ResponseBody
     public List<HabitDTO> getTodayHabits(@AuthenticationPrincipal UserDetails user) {
@@ -123,18 +117,17 @@ public class HabitController {
         return habitService.getTodayTodos(user.getUsername());
     }
 
-    /** ✅ 습관 상세 화면 */
     @GetMapping("/detail/{id}")
     public String detailHabit(@PathVariable("id") Long id,
                               @AuthenticationPrincipal UserDetails user,
                               Model model) {
         if (user == null) {
-            return "redirect:/user/login";   // 로그인 안돼있으면 로그인으로
+            return "redirect:/user/login";
         }
 
         HabitDTO habit = habitService.getHabitDetail(id, user.getUsername());
         model.addAttribute("habit", habit);
 
-        return "habit/detail";  // templates/habit/detail.html
+        return "habit/detail";
     }
 }

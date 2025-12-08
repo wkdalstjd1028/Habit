@@ -7,7 +7,6 @@
     <title>습관 상세 | Mini Habit Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <!-- 기존 폼 CSS 재사용 -->
     <link rel="stylesheet" th:href="@{/css/habit-form.css}">
 </head>
 <body>
@@ -39,12 +38,10 @@
         </div>
 
         <div class="btn-row" style="margin-top: 20px;">
-            <!-- 수정하기 버튼 -->
             <a th:href="@{|/habit/edit/${habit.id}|}" class="btn-primary">
                 수정하기
             </a>
 
-            <!-- 목록으로 -->
             <a th:href="@{/habit/list}" class="btn-secondary">
                 내 습관 목록으로
             </a>

@@ -25,7 +25,7 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    // ★ 여기가 추가
+
     public Member getMember(String username) {
         return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));

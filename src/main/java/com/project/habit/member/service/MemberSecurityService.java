@@ -31,7 +31,7 @@ public class MemberSecurityService implements UserDetailsService {
         return User.builder()
                 .username(member.getUsername())
                 .password(member.getPassword())
-                .roles("USER")      // ★ role 없이 USER 고정
+                .roles("USER")
                 .build();
     }
 }

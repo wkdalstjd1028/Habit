@@ -38,7 +38,7 @@ public class MemberController {
 
     @GetMapping("/signup")
     public String signup(Model model){
-        model.addAttribute("memberDto", new MemberDTO()); // ★ 수정
+        model.addAttribute("memberDto", new MemberDTO());
         return "user/signup";
     }
 
@@ -46,13 +46,13 @@ public class MemberController {
     public String signup(@Valid MemberDTO memberDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()) {
-            model.addAttribute("memberDto", memberDto); // ★ 누락 시 EL 오류 발생
+            model.addAttribute("memberDto", memberDto);
             return "user/signup";
         }
 
         if(!memberDto.getPassword1().equals(memberDto.getPassword2())){
             bindingResult.rejectValue("password2", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-            model.addAttribute("memberDto", memberDto); // ★ 반드시 있어야 함
+            model.addAttribute("memberDto", memberDto);
             return "user/signup";
         }
 
@@ -60,7 +60,7 @@ public class MemberController {
             memberService.create(memberDto);
         } catch (DataIntegrityViolationException e) {
             model.addAttribute("errorMessage", "이미 존재하는 아이디입니다.");
-            model.addAttribute("memberDto", memberDto); // ★ 다시 담기
+            model.addAttribute("memberDto", memberDto);
             return "user/signup";
         }
 

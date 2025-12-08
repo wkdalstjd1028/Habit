@@ -20,6 +20,5 @@ public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
 
     void deleteByHabit(Habit habit);
 
-    // ✅ 오늘 이 회원이 체크한 습관들
     List<HabitCheck> findByHabit_MemberAndCheckInDate(Member member, LocalDate checkInDate);
 }
