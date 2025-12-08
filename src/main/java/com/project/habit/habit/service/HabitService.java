@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -90,5 +91,30 @@ public class HabitService {
     /** 필요 시 엔티티 그대로 사용 (조회만) */
     public Habit getHabit(Long habitId, String username) {
         return getHabitEntity(habitId, username);
+    }
+
+    /** 오늘 아직 체크인 안 된 습관들만 반환 */
+    public List<HabitDTO> getTodayTodos(String username) {
+        Member member = memberService.getMember(username);
+        LocalDate today = LocalDate.now();
+
+        List<Habit> habits = habitRepository.findByMember(member);
+
+        return habits.stream()
+                // .filter(Habit::isActive)   // isActive 필드 있으면 이렇게 한 번 걸러도 좋고
+                .filter(habit -> !habitCheckRepository
+                        .existsByHabitAndCheckInDate(habit, today)) // 오늘 체크 안 한 것만
+                .map(HabitDTO::fromEntity) // 이미 쓰고 있는 변환 메서드 사용
+                .toList();
+    }
+
+    /** 회원 소유의 습관 하나 가져오기 (상세/수정 공용) */
+    public HabitDTO getHabitDetail(Long habitId, String username) {
+        Member member = memberService.getMember(username);
+
+        Habit habit = habitRepository.findByIdAndMember(habitId, member)
+                .orElseThrow(() -> new RuntimeException("해당 습관을 찾을 수 없습니다."));
+
+        return HabitDTO.fromEntity(habit);
     }
 }

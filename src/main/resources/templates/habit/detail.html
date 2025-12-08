@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>습관 상세 | Mini Habit Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- 기존 폼 CSS 재사용 -->
+    <link rel="stylesheet" th:href="@{/css/habit-form.css}">
+</head>
+<body>
+<div class="page">
+
+    <h1 class="page-title">습관 상세</h1>
+
+    <div class="card">
+        <div class="form-group">
+            <label>습관 이름</label>
+            <div style="font-size: 15px; font-weight: 600;"
+                 th:text="${habit.name}">습관 이름</div>
+        </div>
+
+        <div class="form-group">
+            <label>습관 유형</label>
+            <div style="font-size: 14px; color: #4b5563;"
+                 th:text="${habit.habitType}">
+                DAILY
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>설명</label>
+            <div style="font-size: 14px; color: #4b5563; white-space: pre-line;"
+                 th:text="${habit.description}">
+                습관 설명
+            </div>
+        </div>
+
+        <div class="btn-row" style="margin-top: 20px;">
+            <!-- 수정하기 버튼 -->
+            <a th:href="@{|/habit/edit/${habit.id}|}" class="btn-primary">
+                수정하기
+            </a>
+
+            <!-- 목록으로 -->
+            <a th:href="@{/habit/list}" class="btn-secondary">
+                내 습관 목록으로
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

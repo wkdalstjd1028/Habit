@@ -7,162 +7,10 @@
     <title>Mini Habit Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 24px 16px 64px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 20px;
-        }
-
-        .nav-links {
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-
-        .hero {
-            margin-top: 40px;
-            padding: 32px 24px;
-            background-color: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-        }
-
-        .hero-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .hero-subtitle {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 24px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            padding: 10px 18px;
-            font-size: 14px;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background-color: #22c55e;
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background-color: #16a34a;
-        }
-
-        .btn-secondary {
-            background-color: #e5e7eb;
-            color: #111827;
-        }
-
-        .btn-secondary:hover {
-            background-color: #d1d5db;
-        }
-
-        .meta {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .feature-grid {
-            margin-top: 32px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .feature-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 16px 18px;
-            font-size: 14px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-        }
-
-        .feature-title {
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .feature-desc {
-            color: #666;
-            font-size: 13px;
-        }
-
-        .grass-preview {
-            margin-top: 24px;
-            background-color: #111827;
-            border-radius: 12px;
-            padding: 16px;
-            color: #e5e7eb;
-            font-size: 12px;
-        }
-
-        .grass-row {
-            display: flex;
-            gap: 4px;
-            margin-top: 8px;
-        }
-
-        .grass-cell {
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-            background-color: #1f2937;
-        }
-
-        .grass-cell.active {
-            background-color: #22c55e;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
 </head>
 <body>
+<div th:replace="fragments/header :: siteHeader"></div>
 <div class="container">
     <header>
         <div class="logo">Mini Habit Tracker</div>
@@ -202,21 +50,124 @@
                 <a class="btn-secondary" th:href="@{/habit/create}">새 습관 등록하기</a>
             </div>
 
-            <div class="grass-preview">
-                <div>월별 잔디 미리 보기 (예시)</div>
-                <div class="grass-row">
-                    <div class="grass-cell active"></div>
-                    <div class="grass-cell"></div>
-                    <div class="grass-cell active"></div>
-                    <div class="grass-cell"></div>
-                    <div class="grass-cell active"></div>
-                    <div class="grass-cell"></div>
-                    <div class="grass-cell active"></div>
+            <div style="
+    margin-top: 24px;
+    background-color: #0f172a;
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: #e5e7eb;">
+                <div style="font-size: 13px; margin-bottom: 8px;">
+                    월별 잔디 보기
+                    <span id="grass-month-label" style="font-size: 12px; color: #9ca3af; margin-left: 6px;"></span>
                 </div>
+
+                <!-- 실제 잔디가 들어갈 영역 -->
+                <div id="grass-grid"
+                     style="display: flex; flex-wrap: wrap; gap: 4px;">
+                    <!-- JS로 작은 네모(칸)들을 채워 넣을 거야 -->
+                </div>
+
+                <section class="today-section" sec:authorize="isAuthenticated()"
+                         style="margin-top: 20px;">
+                    <h2 style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">
+                        오늘 해야 할 일
+                    </h2>
+
+                    <p id="today-empty"
+                       style="font-size: 13px; color: #9ca3af; margin: 4px 0; display: none;">
+                        오늘 해야 할 일은 모두 완료했어요 🎉
+                    </p>
+
+                    <ul id="today-list"
+                        style="list-style: none; padding: 0; margin: 0;"></ul>
+
+                    <div style="margin-top: 8px;">
+                        <a th:href="@{/habit/list}"
+                           style="font-size: 12px; color: #16a34a; text-decoration: none;">
+                            내 습관 페이지에서 체크인 하기 →
+                        </a>
+                    </div>
+                </section>
             </div>
         </section>
 
     </main>
 </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const grid = document.getElementById("grass-grid");
+        const monthLabel = document.getElementById("grass-month-label");
+
+        if (!grid) return;  // 홈이 아닐 수도 있으니 안전 장치
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // 1~12
+
+        // 월 라벨 표시 (예: 2025-12)
+        monthLabel.textContent = `${year}-${String(month).padStart(2, "0")}`;
+
+        // ✅ 1) 월별 잔디 로딩
+        fetch(`/habit/calendar?year=${year}&month=${month}`)
+            .then(res => res.json())
+            .then(data => {
+                const daysInMonth = new Date(year, month, 0).getDate();
+                const checkedSet = new Set(data.checkedDays || []);
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dot = document.createElement("div");
+                    dot.style.width = "14px";
+                    dot.style.height = "14px";
+                    dot.style.borderRadius = "4px";
+                    dot.style.backgroundColor = checkedSet.has(day) ? "#22c55e" : "#1f2937";
+                    grid.appendChild(dot);
+                }
+            })
+            .catch(err => {
+                console.error("잔디 데이터 로딩 실패", err);
+            });
+
+        // ✅ 2) 오늘 해야 할 일 로딩
+        const todayList = document.getElementById("today-list");
+        const todayEmpty = document.getElementById("today-empty");
+
+        if (todayList) {
+            fetch("/habit/today")
+                .then(res => res.json())
+                .then(habits => {
+                    if (!habits || habits.length === 0) {
+                        if (todayEmpty) todayEmpty.style.display = "block";
+                        return;
+                    }
+
+                   habits.forEach(habit => {
+                        const li = document.createElement("li");
+                        li.classList.add("today-item");
+
+                        // 점(•) 텍스트
+                        const bullet = document.createTextNode("• ");
+
+                        // 실제 클릭 가능한 링크
+                        const link = document.createElement("a");
+                        link.classList.add("today-link");
+                        link.textContent = habit.name;
+
+                        // ✔ 여기서 상세(또는 수정) 화면으로 이동
+                        //    - 현재 갖고 있는 edit URL 패턴 사용: /habit/edit/{id}
+                        link.href = `/habit/detail/${habit.id}`;;
+
+                        li.appendChild(bullet);
+                        li.appendChild(link);
+                        todayList.appendChild(li);
+                        });
+
+                })
+                .catch(err => {
+                    console.error("오늘 할 일 로딩 실패", err);
+                });
+        }
+    });
+</script>
+
 </html>

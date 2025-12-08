@@ -9,6 +9,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/habit")
 @RequiredArgsConstructor
@@ -35,5 +40,28 @@ public class HabitCheckController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
         }
+    }
+    @GetMapping("/calendar")
+    public Map<String, Object> getMonthlyCalendar(
+            @AuthenticationPrincipal UserDetails user,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month
+    ) {
+        if (user == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+
+        LocalDate now = LocalDate.now();
+        int y = (year != null) ? year : now.getYear();
+        int m = (month != null) ? month : now.getMonthValue();
+
+        List<Integer> checkedDays = habitCheckService.getMonthlyCheckedDays(user.getUsername(), y, m);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("year", y);
+        result.put("month", m);
+        result.put("checkedDays", checkedDays); // 예: [1,3,5,10]
+
+        return result;
     }
 }
