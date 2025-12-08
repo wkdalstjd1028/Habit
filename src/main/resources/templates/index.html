@@ -12,29 +12,7 @@
 <body>
 <div th:replace="fragments/header :: siteHeader"></div>
 <div class="container">
-    <header>
-        <div class="logo">Mini Habit Tracker</div>
 
-        <nav class="nav-links">
-            <!-- 로그인 시에만 보이는 '내 습관' -->
-            <a sec:authorize="isAuthenticated()"
-               th:href="@{/habit/list}">
-                내 습관
-            </a>
-
-            <a sec:authorize="!isAuthenticated()"
-               th:href="@{/user/login}">로그인</a>
-            <a sec:authorize="!isAuthenticated()"
-               th:href="@{/user/signup}">회원가입</a>
-
-            <span sec:authorize="isAuthenticated()"
-                  style="color:#16a34a; margin-left:4px;">
-        <span th:text="${#authentication.name}"></span>님
-      </span>
-            <a sec:authorize="isAuthenticated()"
-               th:href="@{/user/logout}">로그아웃</a>
-        </nav>
-    </header>
 
     <main>
         <section class="hero">
