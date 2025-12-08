@@ -127,21 +127,17 @@
 
 <div class="container">
     <div class="title">
-        <h1>Mini Habit Tracker 🌱</h1>
-        <p>로그인하고 오늘의 잔디를 심어 보세요.</p>
+        <h1>Mini Habit Tracker</h1>
     </div>
 
     <div class="card">
 
-        <!-- 로그인 에러 메시지 -->
         <div class="error-message" th:if="${loginErrorMessage}" th:text="${loginErrorMessage}">
             아이디 또는 비밀번호를 확인하세요.
         </div>
 
-        <!-- 로그인 폼 -->
         <form th:action="@{/user/login}" method="post">
 
-            <!-- CSRF 토큰 -->
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}"/>
@@ -165,9 +161,6 @@
         </div>
     </div>
 
-    <div class="meta">
-        버전 0.1 · 잔디 심기 MVP
-    </div>
 </div>
 
 </body>

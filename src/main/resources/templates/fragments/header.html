@@ -10,18 +10,15 @@
 <header th:fragment="siteHeader"
         style="background:#ffffff; border-bottom:1px solid #e5e7eb; padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
 
-    <!-- 로고 / 홈 링크 -->
     <h2 style="margin:0; font-size:18px;">
         <a th:href="@{/}"
            style="text-decoration:none; color:#22c55e; font-weight:700;">
-            Mini Habit Tracker 🌱
+            Mini Habit Tracker
         </a>
     </h2>
 
-    <!-- 오른쪽 메뉴 -->
     <nav style="display:flex; gap:16px; font-size:14px;">
 
-        <!-- 비로그인 상태 -->
         <a sec:authorize="!isAuthenticated()"
            th:href="@{/user/login}"
            style="color:#374151; text-decoration:none;">
@@ -33,7 +30,6 @@
             회원가입
         </a>
 
-        <!-- 로그인 상태 -->
         <span sec:authorize="isAuthenticated()"
               style="color:#16a34a; font-weight:600;">
             <span th:text="${#authentication.name}"></span>님

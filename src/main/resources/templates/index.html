@@ -165,7 +165,7 @@
 <body>
 <div class="container">
     <header>
-        <div class="logo">Mini Habit Tracker 🌱</div>
+        <div class="logo">Mini Habit Tracker</div>
 
         <nav class="nav-links">
             <!-- 로그인 시에만 보이는 '내 습관' -->
@@ -174,13 +174,11 @@
                 내 습관
             </a>
 
-            <!-- 비로그인일 때만 로그인/회원가입 -->
             <a sec:authorize="!isAuthenticated()"
                th:href="@{/user/login}">로그인</a>
             <a sec:authorize="!isAuthenticated()"
                th:href="@{/user/signup}">회원가입</a>
 
-            <!-- 로그인 상태일 때만 닉네임 + 로그아웃 -->
             <span sec:authorize="isAuthenticated()"
                   style="color:#16a34a; margin-left:4px;">
         <span th:text="${#authentication.name}"></span>님
@@ -193,27 +191,16 @@
     <main>
         <section class="hero">
             <h1 class="hero-title">하루 한 번, 잔디 심기 습관 만들기</h1>
-            <p class="hero-subtitle">
-                복잡한 통계 대신, 오늘 했는지만 체크하는 미니 습관 트래커입니다.<br/>
-                회원가입 후 습관을 등록하고, 체크인으로 나만의 잔디를 채워보세요.
-            </p>
 
-            <!-- 🔹 비로그인 상태 전용 버튼 -->
             <div class="hero-buttons" sec:authorize="!isAuthenticated()">
                 <a class="btn-primary" th:href="@{/user/signup}">지금 시작하기</a>
                 <a class="btn-secondary" th:href="@{/user/login}">이미 계정이 있어요</a>
             </div>
 
-            <!-- 🔹 로그인 상태 전용 버튼 -->
             <div class="hero-buttons" sec:authorize="isAuthenticated()">
                 <a class="btn-primary" th:href="@{/habit/list}">내 습관 보러가기</a>
                 <a class="btn-secondary" th:href="@{/habit/create}">새 습관 등록하기</a>
             </div>
-
-            <p class="meta">
-                오늘 날짜: <span th:text="${today}">2025-11-22</span><br/>
-                버전 0.1 · MVP: 사용자 관리 · 습관 등록 · 체크인 · 월별 잔디 조회
-            </p>
 
             <div class="grass-preview">
                 <div>월별 잔디 미리 보기 (예시)</div>
@@ -229,31 +216,6 @@
             </div>
         </section>
 
-        <section class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-title">👤 사용자 관리</div>
-                <div class="feature-desc">
-                    Spring Security를 사용해 회원가입 · 로그인 기능을 제공합니다.
-                    나중에 OAuth2나 JWT로 확장할 수 있도록 구조를 단순하게 유지합니다.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-title">✅ 습관 등록 · 체크인</div>
-                <div class="feature-desc">
-                    “물 2L 마시기”, “운동 10분”처럼 작은 습관을 등록하고,
-                    오늘 했는지 한 번만 체크하는 단순한 인터페이스를 목표로 합니다.
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-title">📅 월별 잔디 캘린더</div>
-                <div class="feature-desc">
-                    복잡한 통계 대신, 한 달 기준으로 잔디를 보여주는 API에 집중합니다.
-                    연속 달성일(Streak)은 나중에 추가해도 됩니다.
-                </div>
-            </div>
-        </section>
     </main>
 </div>
 </body>

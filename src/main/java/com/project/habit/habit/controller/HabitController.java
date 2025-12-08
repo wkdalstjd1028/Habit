@@ -20,9 +20,9 @@ public class HabitController {
 
     /** 내 습관 목록 */
     @GetMapping("/list")
-    public String listHabits(@AuthenticationPrincipal UserDetails user, Model model) {
+    public String listHabits(@AuthenticationPrincipal UserDetails user,
+                             Model model) {
 
-        // 로그인 안 돼 있으면 로그인 페이지로
         if (user == null) {
             return "redirect:/user/login";
         }
@@ -32,7 +32,7 @@ public class HabitController {
         return "habit/list";
     }
 
-    /** 새 습관 등록 화면 */
+    /** 새 습관 등록 폼 */
     @GetMapping("/create")
     public String createHabitForm(Model model) {
         model.addAttribute("habitDTO", new HabitDTO());
@@ -50,12 +50,61 @@ public class HabitController {
         }
 
         if (bindingResult.hasErrors()) {
-            // name / habitType 안 채우면 여기로 옴
             return "habit/create";
         }
 
         String username = user.getUsername();
-        habitService.createHabit(habitDTO, username);   // ★ 실제 로그인한 유저 기준으로 저장
+        habitService.createHabit(habitDTO, username);
+        return "redirect:/habit/list";
+    }
+
+    /** 습관 수정 폼 */
+    @GetMapping("/edit/{habitId}")
+    public String editHabitForm(@AuthenticationPrincipal UserDetails user,
+                                @PathVariable Long habitId,
+                                Model model) {
+
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        String username = user.getUsername();
+        model.addAttribute("habitDTO", habitService.getHabitDto(habitId, username));
+        model.addAttribute("habitId", habitId);
+        return "habit/edit";
+    }
+
+    /** 습관 수정 저장 */
+    @PostMapping("/edit/{habitId}")
+    public String editHabit(@AuthenticationPrincipal UserDetails user,
+                            @PathVariable Long habitId,
+                            @Valid @ModelAttribute("habitDTO") HabitDTO habitDTO,
+                            BindingResult bindingResult) {
+
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "habit/edit";
+        }
+
+        String username = user.getUsername();
+        habitService.updateHabit(habitId, habitDTO, username);
+        return "redirect:/habit/list";
+    }
+
+    /** 습관 삭제 */
+    @PostMapping("/delete/{habitId}")
+    public String deleteHabit(@AuthenticationPrincipal UserDetails user,
+                              @PathVariable Long habitId) {
+
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        String username = user.getUsername();
+        habitService.deleteHabit(habitId, username);
         return "redirect:/habit/list";
     }
 }

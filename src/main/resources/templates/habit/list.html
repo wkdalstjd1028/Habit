@@ -30,7 +30,7 @@
 
         .todo-add-btn {
           padding: 8px 14px;
-          border-radius: 8px;
+          border-radius: 999px;
           border: none;
           background: #22c55e;
           color: #fff;
@@ -83,9 +83,35 @@
           margin-left: 4px;
         }
 
-        .todo-item.done .todo-text {
-          text-decoration: line-through;
-          color: #9ca3af;
+        /* ✅ 오늘 체크인한 습관에 밑줄 */
+        .todo-item.done-today .todo-text {
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+        }
+
+        .todo-actions {
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
+
+        .check-btn {
+          border: none;
+          background: #22c55e;
+          color: #fff;
+          font-size: 12px;
+          padding: 4px 8px;
+          border-radius: 999px;
+          cursor: pointer;
+        }
+
+        .todo-edit-btn {
+          border: none;
+          background: transparent;
+          font-size: 12px;
+          color: #2563eb;
+          cursor: pointer;
+          text-decoration: none;
         }
 
         .todo-delete-btn {
@@ -107,44 +133,139 @@
 <div class="todo-container">
     <h1 class="title">내 습관</h1>
 
-    <!-- 상단: 새 습관 등록 버튼 (1.html의 입력 줄 자리에 사용) -->
     <div class="todo-input-row">
         <a th:href="@{/habit/create}" class="todo-add-btn">새 습관 등록하기</a>
     </div>
 
-    <!-- 필터 UI (지금은 모양만, 기능 X) -->
+    <!-- ✅ 필터: 전체 / 매일 / 매주 / 매월 / 기타 -->
     <div class="todo-filters">
-        <button type="button" class="filter active">전체</button>
-        <button type="button" class="filter">매일</button>
-        <button type="button" class="filter">기타</button>
+        <button type="button" class="filter active" data-filter="ALL">전체</button>
+        <button type="button" class="filter" data-filter="DAILY">매일</button>
+        <button type="button" class="filter" data-filter="WEEKLY">매주</button>
+        <button type="button" class="filter" data-filter="MONTHLY">매월</button>
+        <button type="button" class="filter" data-filter="OTHER">기타</button>
     </div>
 
-    <!-- 습관 리스트 -->
     <ul class="todo-list">
         <!-- 습관이 하나도 없을 때 -->
         <li class="todo-item" th:if="${#lists.isEmpty(habits)}">
-      <span class="empty-message">
-        아직 등록된 습관이 없습니다. 위의 ‘새 습관 등록하기’를 눌러 만들어 보세요.
-      </span>
+            <span class="empty-message">
+                아직 등록된 습관이 없습니다. 위의 ‘새 습관 등록하기’를 눌러 만들어 보세요.
+            </span>
         </li>
 
         <!-- DB에서 가져온 습관 목록 -->
         <li class="todo-item"
             th:each="habit : ${habits}"
-            th:attr="data-habit-id=${habit.id}">
+            th:attr="data-habit-id=${habit.id},data-habit-type=${habit.habitType}">
             <label>
                 <input type="checkbox"/>
                 <span class="todo-text" th:text="${habit.name}">습관 이름</span>
             </label>
-            <!-- description 은 버튼 툴팁으로 보여줌 -->
-            <button type="button"
-                    class="todo-delete-btn"
-                    th:title="${habit.description}">
-                상세
-            </button>
+
+            <div class="todo-actions">
+                <!-- 오늘 체크하기 버튼 -->
+                <button type="button" class="check-btn">체크인</button>
+
+                <!-- 수정: GET /habit/edit/{id} -->
+                <a th:href="@{|/habit/edit/${habit.id}|}" class="todo-edit-btn">수정</a>
+
+                <!-- 삭제: POST /habit/delete/{id} -->
+                <form th:action="@{|/habit/delete/${habit.id}|}"
+                      method="post"
+                      style="margin:0;">
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"/>
+                    <button type="submit" class="todo-delete-btn">삭제</button>
+                </form>
+            </div>
         </li>
     </ul>
 </div>
+
+<!-- ✅ 체크인 + 필터 JS -->
+<script th:inline="javascript">
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+    const csrfToken  = /*[[${_csrf.token}]]*/ '';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkButtons = document.querySelectorAll('.check-btn');
+        const filterButtons = document.querySelectorAll('.filter');
+
+        // 1) 체크인 버튼 클릭 시: 서버 호출 + 밑줄 표시
+        checkButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const li = btn.closest('.todo-item');
+                const habitId = li.getAttribute('data-habit-id');
+
+                if (!habitId) {
+                    alert('습관 ID를 찾을 수 없습니다.');
+                    return;
+                }
+
+                fetch('/habit/checkin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: JSON.stringify({ habitId: habitId })
+                })
+                .then(async response => {
+                    const text = await response.text();
+                    if (!response.ok) {
+                        throw new Error(text || '체크인 중 오류가 발생했습니다.');
+                    }
+                    // ✅ 성공 시 밑줄 표시
+                    li.classList.add('done-today');
+                    alert(text); // "체크인 완료!"
+                })
+                .catch(err => {
+                    alert(err.message);
+                });
+            });
+        });
+
+        // 2) 필터 버튼 클릭 시: 타입별로 보여주기
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                // active 클래스 정리
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter'); // ALL / DAILY / WEEKLY / MONTHLY / OTHER
+                const items = document.querySelectorAll('.todo-item[data-habit-id]');
+
+                items.forEach(li => {
+                    const type = li.getAttribute('data-habit-type'); // 예: DAILY, WEEKLY, MONTHLY
+                    let show = true;
+
+                    if (filter === 'DAILY') {
+                        show = (type === 'DAILY');
+                    } else if (filter === 'WEEKLY') {
+                        show = (type === 'WEEKLY');
+                    } else if (filter === 'MONTHLY') {
+                        show = (type === 'MONTHLY');
+                    } else if (filter === 'OTHER') {
+                        show = (type !== 'DAILY' && type !== 'WEEKLY' && type !== 'MONTHLY');
+                    } else {
+                        // ALL
+                        show = true;
+                    }
+
+                    li.style.display = show ? 'flex' : 'none';
+                });
+            });
+        });
+
+        // 처음 로드 시 "전체" 필터 한 번 적용
+        const defaultFilter = document.querySelector('.filter.active');
+        if (defaultFilter) {
+            defaultFilter.click();
+        }
+    });
+</script>
 
 </body>
 </html>
